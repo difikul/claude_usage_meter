@@ -37,15 +37,64 @@ jobs:
           go-version: '1.25'
 
       - name: Build macOS binary
-        run: go build -tags production -ldflags="-s -w" -o claude_usage_meter_macos .
+        run: go build -tags production -ldflags="-s -w" -o claude_usage_meter .
 
-      - name: Zip binary
-        run: zip claude_usage_meter_macos.zip claude_usage_meter_macos
+      - name: Převést ikonu PNG → ICNS
+        run: |
+          mkdir -p AppIcon.iconset
+          sips -z 16 16   build/appicon.png --out AppIcon.iconset/icon_16x16.png
+          sips -z 32 32   build/appicon.png --out AppIcon.iconset/icon_16x16@2x.png
+          sips -z 32 32   build/appicon.png --out AppIcon.iconset/icon_32x32.png
+          sips -z 64 64   build/appicon.png --out AppIcon.iconset/icon_32x32@2x.png
+          sips -z 128 128 build/appicon.png --out AppIcon.iconset/icon_128x128.png
+          sips -z 256 256 build/appicon.png --out AppIcon.iconset/icon_128x128@2x.png
+          sips -z 256 256 build/appicon.png --out AppIcon.iconset/icon_256x256.png
+          sips -z 512 512 build/appicon.png --out AppIcon.iconset/icon_256x256@2x.png
+          sips -z 512 512 build/appicon.png --out AppIcon.iconset/icon_512x512.png
+          iconutil -c icns AppIcon.iconset -o AppIcon.icns
+
+      - name: Sestavit .app bundle
+        run: |
+          APP="Claude Usage Meter.app"
+          mkdir -p "$APP/Contents/MacOS"
+          mkdir -p "$APP/Contents/Resources"
+          cp claude_usage_meter "$APP/Contents/MacOS/claude_usage_meter"
+          chmod +x "$APP/Contents/MacOS/claude_usage_meter"
+          cp AppIcon.icns "$APP/Contents/Resources/AppIcon.icns"
+          cat > "$APP/Contents/Info.plist" << 'EOF'
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>CFBundleExecutable</key>
+              <string>claude_usage_meter</string>
+              <key>CFBundleIdentifier</key>
+              <string>com.difikul.claude-usage-meter</string>
+              <key>CFBundleName</key>
+              <string>Claude Usage Meter</string>
+              <key>CFBundleIconFile</key>
+              <string>AppIcon</string>
+              <key>CFBundleVersion</key>
+              <string>1.0.0</string>
+              <key>CFBundleShortVersionString</key>
+              <string>1.0.0</string>
+              <key>CFBundlePackageType</key>
+              <string>APPL</string>
+              <key>LSUIElement</key>
+              <true/>
+              <key>NSHighResolutionCapable</key>
+              <true/>
+          </dict>
+          </plist>
+          EOF
+
+      - name: Zabalit .app do zipu
+        run: zip -r "Claude_Usage_Meter_macOS.zip" "Claude Usage Meter.app"
 
       - uses: actions/upload-artifact@v4
         with:
           name: macos-amd64
-          path: claude_usage_meter_macos.zip
+          path: Claude_Usage_Meter_macOS.zip
 
   build-linux:
     runs-on: ubuntu-latest
@@ -100,5 +149,5 @@ jobs:
           generate_release_notes: true
           files: |
             windows-amd64/claude_usage_meter.exe
-            macos-amd64/claude_usage_meter_macos.zip
+            macos-amd64/Claude_Usage_Meter_macOS.zip
             linux-amd64/claude_usage_meter_linux
