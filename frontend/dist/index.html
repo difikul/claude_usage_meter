@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Usage Meter</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="widget">
+    <div class="titlebar">
+      <span class="title">Claude Usage</span>
+      <div class="titlebar-buttons">
+        <button id="btn-refresh" class="btn-icon" title="Refresh">&#x21bb;</button>
+        <button id="btn-hide" class="btn-icon" title="Hide to tray">&#x2212;</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <!-- 5h Session -->
+      <div class="section" id="section-5h">
+        <div class="section-row">
+          <span class="section-header">5h Session</span>
+          <span class="reset-time" id="reset-5h"></span>
+        </div>
+        <div class="progress-container">
+          <div class="progress-bar" id="bar-5h" style="width: 0%"></div>
+        </div>
+        <div class="section-row">
+          <span class="percent" id="percent-5h">0% used</span>
+          <span class="cost-info" id="cost-5h">$0.00 / $5.00</span>
+        </div>
+        <div class="tokens" id="tokens-5h">
+          <span class="token-item">In: 0</span>
+          <span class="token-item">Out: 0</span>
+          <span class="token-item">Cache R: 0</span>
+          <span class="token-item">Cache W: 0</span>
+        </div>
+      </div>
+
+      <div class="divider-h"></div>
+
+      <!-- Weekly (all models) -->
+      <div class="section" id="section-weekly">
+        <div class="section-row">
+          <span class="section-header">Weekly (all models)</span>
+          <span class="reset-time" id="reset-weekly"></span>
+        </div>
+        <div class="progress-container">
+          <div class="progress-bar" id="bar-weekly" style="width: 0%"></div>
+        </div>
+        <div class="section-row">
+          <span class="percent" id="percent-weekly">0% used</span>
+          <span class="cost-info" id="cost-weekly">$0.00 / $40.00</span>
+        </div>
+        <div class="tokens" id="tokens-weekly">
+          <span class="token-item">In: 0</span>
+          <span class="token-item">Out: 0</span>
+          <span class="token-item">Cache R: 0</span>
+          <span class="token-item">Cache W: 0</span>
+        </div>
+      </div>
+
+      <div class="divider-h"></div>
+
+      <!-- Weekly (Sonnet only) -->
+      <div class="section" id="section-sonnet">
+        <div class="section-row">
+          <span class="section-header">Weekly (Sonnet only)</span>
+          <span class="reset-time" id="reset-sonnet"></span>
+        </div>
+        <div class="progress-container">
+          <div class="progress-bar" id="bar-sonnet" style="width: 0%"></div>
+        </div>
+        <div class="section-row">
+          <span class="percent" id="percent-sonnet">0% used</span>
+          <span class="cost-info" id="cost-sonnet">$0.00 / $32.00</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <span id="tier-info">Tier: ...</span>
+      <span id="last-update">Loading...</span>
+    </div>
+  </div>
+
+  <script src="main.js" type="module"></script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+# Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+claude_usage_meter
+claude_usage_meter_linux
+
+# Build artifacts
+build/*.log
+build.log
+
+# Go build cache
+/vendor/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# macOS
+.DS_Store
+
+# Wails dev
+wailsjs/
